@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Store essential experiment specific variables in one place.
+export EXPT='g2-ibms' # Current experiment
+export EXPT_IP='imbs-fe' # Current experiment hostname/IP
+export EXPT_DIR='/home/G2Muon/Applications/ibms-daq/' # Base directory
+export MHTTPD_PORT='8080'  # Main access point for MIDAS webpage
+
+# This defines an array of IP/hostnames to whitelist on mhttpd.
+export EXT_IP=( 
+)
+
+# Choose which MIDAS utilities start by default.
+export MIDAS_UTIL=(
+    'mhttpd'
+    'mlogger'
+    'mserver'
+)
+
+# Choose which front-ends to launch.
+export EXPT_FE=(
+    'ibms'
+)
+
+# Choose midas analyzers to launch.
+export EXPT_AN=(
+)
+
+# end script

@@ -1,12 +1,12 @@
-mkdir "/Equipment/IMBS Detector/Settings/devices"
-cd "/Equipment/IMBS Detector/Settings/devices"
+mkdir "/Equipment/IBMS Detector/Settings/devices"
+cd "/Equipment/IBMS Detector/Settings/devices"
 
-ln "/Settings/Hardware/caen_1742/0"  "/caen_1742_0"
+ln "/Settings/Hardware/caen_1742/0"  "/Equipment/IBMS Detector/Settings/devices/caen_1742_0"
 
-mkdir "/Equipment/IBMS Detector/Settings/channel_map"
-cd "/Equipment/IBMS Detector/Settings/channel_map"
+mkdir "/Equipment/IBMS Detector/Settings/channel_maps"
+cd "/Equipment/IBMS Detector/Settings/channel_maps"
 
-mkdir INT[32] caen_1742_0
+create INT caen_1742_0[32]
 
 set caen_1742_0[0] 0
 set caen_1742_0[1] 1
@@ -41,7 +41,7 @@ set caen_1742_0[29] 29
 set caen_1742_0[30] 30
 set caen_1742_0[31] 31
 
-mkdir INT[32] caen_1742_1
+create INT caen_1742_1[32]
 
 set caen_1742_1[0] 32
 set caen_1742_1[1] 33
@@ -76,7 +76,7 @@ set caen_1742_1[29] 61
 set caen_1742_1[30] 62
 set caen_1742_1[31] 63
 
-mkdir INT[32] caen_1742_2
+create INT caen_1742_2[32]
 set caen_1742_2[0] 64
 set caen_1742_2[1] 65
 set caen_1742_2[2] 66

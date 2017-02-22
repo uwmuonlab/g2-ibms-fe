@@ -4,7 +4,7 @@ create INT base_address
 set base_address 0x00000000
 
 create DOUBLE sampling_rate
-set sample_rate 1.0
+set sampling_rate 1.0
 
 create INT pretrigger_delay
 set pretrigger_delay 50

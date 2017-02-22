@@ -8,10 +8,10 @@ wget https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py
 pip install virtualenv
 
 virtualenv /usr/local/opt/pyenv
-chown -R newg2:newg2 /usr/local/opt/pyenv
+chown -R G2Muon:G2Muon /usr/local/opt/pyenv
 
 if [ ! "$(grep 'alias pyenv' ~/.bashrc)" ]; then
-    echo '' >> /home/newg2/.bashrc
-    echo '# Set alias for activating python virualenv.' >> /home/newg2/.bashrc
-    echo 'alias pyenv=". /usr/local/opt/pyenv/bin/activate"' >> /home/newg2/.bashrc
+    echo '' >> /home/G2Muon/.bashrc
+    echo '# Set alias for activating python virualenv.' >> /home/G2Muon/.bashrc
+    echo 'alias pyenv=". /usr/local/opt/pyenv/bin/activate"' >> /home/G2Muon/.bashrc
 fi

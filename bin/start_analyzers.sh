@@ -4,7 +4,7 @@
 source $(dirname $(readlink -f $0))/../.expt-env
 
 for an in "${EXPT_AN[@]}"; do
-    anname="${EXPT_DIR}/online/analyzers/bin/${an}"
+    anname="${EXPT_DIR}/analyzers/bin/${an}"
     scname="${EXPT}.${an//_/-}"
     cmd="${anname} -e $EXPT -s $ROODY_PORT $(printf \\r)"
     screen -dmS $scname

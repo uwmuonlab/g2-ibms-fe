@@ -4,7 +4,7 @@
 source $(dirname $(readlink -f $0))/../.expt-env
 
 for fe in "${EXPT_FE[@]}"; do
-    fename="${EXPT_DIR}/common/bin/${fe}"
+    fename="${EXPT_DIR}bin/${fe}"
     scname="${EXPT}.${fe//_/-}"
     screen -dmS $scname
     sleep 0.05

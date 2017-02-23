@@ -164,10 +164,11 @@ INT frontend_init()
     return rc;
   }
 
+  int dev_idx = 0;
+
   // Load the channel maps
   for (auto &dev: conf.get_child("devices")) {
 
-    static int dev_idx = 0; 
     int i = 0;
 
     std::array<int, 32> channels;
@@ -177,7 +178,9 @@ INT frontend_init()
       channels[i++] = v.second.get_value<int>();
     }
    
-    channel_map[dev_idx++] = channels;
+    channel_map[dev_idx] = channels;
+ 
+    dev_idx++;
   }
       
   run_in_progress = false;
@@ -266,14 +269,14 @@ INT begin_of_run(INT run_number, char *error)
   if (write_root) {
 
     pf = new TFile(filename.c_str(), "recreate");
-    pt = new TTree("t_ibms", "IMBS Detector Data");
+    pt = new TTree("t_ibms", "IBMS Detector Data");
 
     pt->SetAutoSave(5);
     pt->SetAutoFlush(20);
 
     std::string br_name("ibms");
 
-    pt->Branch(br_name.c_str(), &data.sys_clock, g2::ibms_str);
+    pt->Branch(br_name.c_str(), &data.sys_clock[0], g2::ibms_str);
   }
 
   // Run variables.
@@ -384,7 +387,7 @@ INT read_ibms_event(char *pevent, INT off)
   static unsigned long long events_written;
 
   // Variable which contains all wfd data.
-  static hw::event_data_t wfd_data;
+  hw::event_data_t wfd_data;
   const int caen_ch = 32;
 
   int count = 0;
@@ -396,7 +399,7 @@ INT read_ibms_event(char *pevent, INT off)
   wfd_workers->GetEventData(wfd_data);
 
   if (wfd_data[0].sys_clock == 0) {
-    cm_msg(MINFO, "read_ibms_event", "IMBS data was empty");
+    cm_msg(MINFO, "read_ibms_event", "IBMS data was empty");
     return 0;
   }
 
@@ -405,22 +408,28 @@ INT read_ibms_event(char *pevent, INT off)
 
   for (auto &d : wfd_data) {
 
-    // Match up the device index with the mapped data index.
-    for (int &i : channel_map[dev_idx++]) {
+    std::cout << "dev_idx: " << dev_idx << std::endl;
 
-      // Track wfd index.
-      static int j = 0;
+    // Track wfd index.
+    int j = 0;
+
+    // Match up the device index with the mapped data index.
+    for (int &ch : channel_map[dev_idx]) {
+
+      std::cout << ch << ", " << j << std::endl;
 
       // Skip unused channels
-      if (i < 0) {
+      if (ch < 0) {
 	continue; 
       }
 
       // Copy wfd data to ibms data.
-      data.sys_clock[i] = d.sys_clock;
-      data.dev_clock[i] = d.dev_clock[j];
-      std::copy(d.trace[i].begin(), d.trace[i].end(), &data.trace[j++][0]);
-    }
+      data.sys_clock[ch] = d.sys_clock;
+      data.dev_clock[ch] = d.dev_clock[j];
+      std::copy(d.trace[ch].begin(), d.trace[ch].end(), &data.trace[j++][0]);
+   }
+
+    dev_idx++;
   }
 
   if (write_root && run_in_progress) {
@@ -442,6 +451,8 @@ INT read_ibms_event(char *pevent, INT off)
   bk_init32(pevent);
 
   if (write_midas) {
+
+    cm_msg(MINFO, "read_ibms_event", "Shipping MIDAS event");
 
     // Copy the shimming trolley data.
     bk_create(pevent, mbank_name, TID_DWORD, &pdata);

@@ -392,12 +392,11 @@ INT read_ibms_event(char *pevent, INT off)
       data.dev_clock[ch] = hw::steadyclock_us();
 
       for (int i = 0; i < g2::kIbmsTraceLength; ++i) {
-	data.trace[j][i] = 1000 * dev_idx + ch * 10 + norm_dist(gen);
+	data.trace[ch][i] = 1000 * (dev_idx + 1) + ch * 20 + norm_dist(gen);
       }
+
+      j++;
     }
-    
-    j++;
-    dev_idx++;
   }
 
   if (write_root && run_in_progress) {

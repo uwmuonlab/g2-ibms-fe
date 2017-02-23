@@ -119,7 +119,7 @@ std::map<int, std::array<int, 32>> channel_map;
 std::atomic<bool> run_in_progress;
 g2::ibms_t data;
 
-const double kSuperCyclePeriod = 83.33;
+const double kSuperCyclePeriod = 83.33e3;
 std::default_random_engine gen;
 std::normal_distribution<double> norm_dist(0.0, 5.0);
 

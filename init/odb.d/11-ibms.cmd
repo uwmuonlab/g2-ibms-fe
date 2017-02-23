@@ -1,6 +1,10 @@
+mkdir "/Equipment/IBMS Detector/Settings"
+cd "/Equipment/IBMS Detector/Settings"
+create BOOL write_root
+set write_root y
+
 mkdir "/Equipment/IBMS Detector/Settings/devices"
 cd "/Equipment/IBMS Detector/Settings/devices"
-
 ln "/Settings/Hardware/caen_1742/0"  "/Equipment/IBMS Detector/Settings/devices/caen_1742_0"
 
 mkdir "/Equipment/IBMS Detector/Settings/channel_maps"

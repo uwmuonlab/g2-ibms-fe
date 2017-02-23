@@ -3,3 +3,5 @@
 *.o
 
 .expt-env
+bin/ibms
+bin/sim_ibms

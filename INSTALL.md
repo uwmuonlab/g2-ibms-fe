@@ -3,7 +3,7 @@
 - clone repo to anywhere
 ```bash
 mkdir ~/Applications && cd ~/Applications
-git clone https://github.com/uwmuonlab/g2-ibms/fe
+git clone https://github.com/uwmuonlab/g2-ibms-fe
 ```
 
 - install headers in core to /usr/local/include

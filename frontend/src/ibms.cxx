@@ -82,7 +82,7 @@ extern "C" {
 	 EVENTID_IBMS, // event ID
 	 0x1,          // trigger mask
          "SYSTEM",     // event buffer (use to be SYSTEM)
-         EQ_POLLED,    // equipment type
+         EQ_PERIODIC,  // equipment type
          0,            // not used
          "MIDAS",      // format
          TRUE,         // enabled
@@ -143,6 +143,11 @@ int load_devices(boost::property_tree::ptree pt)
   for (auto &val : pt.get_child("devices")) {
     std::string name = val.first;
     std::string conf = json_tmpfile(val.second);
+
+    cm_msg(MDEBUG, "load_devices", 
+	   "loading worker %s, %s", 
+	   name.c_str(), 
+	   conf.c_str());
     auto worker = new hw::Caen1742(name, conf, g2::kIbmsTraceLength);
     wfd_workers->PushBack((hw::WfdBase *)worker);
   }
@@ -349,7 +354,7 @@ INT poll_event(INT source, INT count, BOOL test) {
   // fake calibration
   if (test) {
     for (int i = 0; i < count; i++) {
-      usleep(10);
+      usleep(100);
     }
     return 0;
   }
@@ -398,7 +403,12 @@ INT read_ibms_event(char *pevent, INT off)
   DWORD *pdata;
 
   cm_msg(MDEBUG, "read_ibms_event", "data readout started");
-  
+
+  { // @testing
+    wfd_workers->SoftwareTriggers();
+    usleep(100000);
+  } // @testing
+
   wfd_workers->GetEventData(wfd_data);
 
   if (wfd_data[0].sys_clock == 0) {
@@ -411,15 +421,11 @@ INT read_ibms_event(char *pevent, INT off)
 
   for (auto &d : wfd_data) {
 
-    std::cout << "dev_idx: " << dev_idx << std::endl;
-
     // Track wfd index.
     int j = 0;
 
     // Match up the device index with the mapped data index.
     for (int &ch : channel_map[dev_idx]) {
-
-      std::cout << ch << ", " << j << std::endl;
 
       // Skip unused channels
       if (ch < 0) {
@@ -429,7 +435,9 @@ INT read_ibms_event(char *pevent, INT off)
       // Copy wfd data to ibms data.
       data.sys_clock[ch] = d.sys_clock;
       data.dev_clock[ch] = d.dev_clock[j];
-      std::copy(d.trace[ch].begin(), d.trace[ch].end(), &data.trace[j++][0]);
+      std::copy(d.trace[j].begin(), d.trace[j].end(), &data.trace[ch][0]);
+
+      ++j;
     }
 
     for (int trg = 0; trg < 4; ++trg) {
@@ -437,6 +445,9 @@ INT read_ibms_event(char *pevent, INT off)
 		d.trace[31 + trg].end(), 
 		&data.trigger[dev_idx * 4 + trg][0]);
     }
+
+    auto w = reinterpret_cast<const hw::Caen1742 *>((*wfd_workers)[dev_idx]);
+    data.lvds_bits[dev_idx] = w->lvds_bits();
 
     dev_idx++;
   }

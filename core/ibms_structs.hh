@@ -34,14 +34,14 @@ struct ibms_t {
   ULong64_t dev_clock[IBMS_NUM_CHANNELS];
   UShort_t trace[IBMS_NUM_CHANNELS][IBMS_TRACE_LENGTH];
   UShort_t trigger[IBMS_NUM_TRIGGERS][IBMS_TRACE_LENGTH];
-  Bool_t lvds_bits[3][16];
+  UShort_t lvds_bits[3];
 };
 
 #define MAKE_IBMS_STRING(name, ch, len, trg) IMBS_HELPER(name, ch, len, trg)
 #define IMBS_HELPER(name, ch, len, trg) \
 const char * const name = \
 "sys_clock["#ch"]/l:dev_clock["#ch"]/l:trace["#ch"]["#len"]/s:" \
-"trigger["#trg"]["#len"]/s:lvds_bits[3][16]/O";
+"trigger["#trg"]["#len"]/s:lvds_bits[3]/s";
 
 MAKE_IBMS_STRING(ibms_str, IBMS_NUM_CHANNELS, IBMS_TRACE_LENGTH, IBMS_NUM_TRIGGERS);
 

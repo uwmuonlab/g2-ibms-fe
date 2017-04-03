@@ -126,6 +126,8 @@ int load_devices(boost::property_tree::ptree pt);
 
 int load_devices(boost::property_tree::ptree pt)
 {
+  cm_msg(MDEBUG, "IBMS", "loading devices");
+
   // Set up the WFD container.
   if (wfd_workers == nullptr) {
 
@@ -169,6 +171,7 @@ INT frontend_init()
   // Load the channel maps
   for (auto &dev: conf.get_child("devices")) {
 
+    cm_msg(MDEBUG, "IBMS", "loading channel maps");
     int i = 0;
 
     std::array<int, 32> channels;

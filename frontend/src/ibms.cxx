@@ -427,7 +427,13 @@ INT read_ibms_event(char *pevent, INT off)
       data.sys_clock[ch] = d.sys_clock;
       data.dev_clock[ch] = d.dev_clock[j];
       std::copy(d.trace[ch].begin(), d.trace[ch].end(), &data.trace[j++][0]);
-   }
+    }
+
+    for (int trg = 0; trg < 4; ++trg) {
+      std::copy(d.trace[31 + trg].begin(), 
+		d.trace[31 + trg].end(), 
+		&data.trigger[dev_idx * 4 + trg][0]);
+    }
 
     dev_idx++;
   }

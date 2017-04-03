@@ -3,7 +3,7 @@
 - clone repo to anywhere
 ```bash
 mkdir ~/Applications && cd ~/Applications
-git clone https://github.com/uwmuonlab/g2-ibms/fe
+git clone https://github.com/uwmuonlab/g2-ibms-fe
 ```
 
 - install headers in core to /usr/local/include
@@ -11,7 +11,7 @@ git clone https://github.com/uwmuonlab/g2-ibms/fe
 cd core
 sudo make install
 cd ..
-``
+```
 
 - setup dependencies with scripts (`init/install.d`)
   - can delete 20-cvmfs.sh and 45-gm2midas.sh if those are already setup
